@@ -1,0 +1,15 @@
+{
+  "name": "meowshoes",
+  "description": "musical shoes",
+  "author": "Suz Hinton <susan@owlposse.com>",
+  "dependencies": {
+    "bopper": ">= 0.1.1",
+    "browserify": ">= 0.1.0",
+    "express": ">= 3.4.0",
+    "serialport": ">= 1.2.2",
+    "socket.io": ">= 0.9.16"
+  },
+ "engines": {
+    "node": ">= 0.10.0"
+  }
+}
