@@ -8,8 +8,6 @@ var sys = require('util'),
     io = require('socket.io').listen(server),
     serialport = require("serialport"),
     SerialPort = serialport.SerialPort;
-    
-
   
 // set up a new serial port, locate the Arduino plugged in via USB
 // for multiple tinyduinos, just create a new serial port, but emit the data the same way
