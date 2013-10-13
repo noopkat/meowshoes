@@ -1,3 +1,6 @@
+// I wouldn't mind moving the following objects to an assets.js file to manage instead
+// but create the visuals object first
+
 // set up the voices and sounds
 var voiceSet = {
   'meow0' : '../sounds/meow01.mp3',
@@ -15,25 +18,8 @@ var voiceSet = {
   'd'     : '../sounds/click.mp3'
 };
 
-// plyaback object, default entries are the metronome
-var playback = [
-  {position: 0,  sensor: 'd'},
-  {position: 1,  sensor: 'd'},
-  {position: 2,  sensor: 'd'},
-  {position: 3,  sensor: 'd'},
-  {position: 4,  sensor: 'd'},
-  {position: 5,  sensor: 'd'},
-  {position: 6,  sensor: 'd'},
-  {position: 7,  sensor: 'd'},
-  {position: 8,  sensor: 'd'},
-  {position: 9,  sensor: 'd'},
-  {position: 10, sensor: 'd'},
-  {position: 11, sensor: 'd'},
-  {position: 12, sensor: 'd'},
-  {position: 13, sensor: 'd'},
-  {position: 14, sensor: 'd'},
-  {position: 15, sensor: 'd'}
-]
+// playback object, will contain all sequenced sounds
+var playback = []
 
 // set up the defaults
 var freestyle    = false,
@@ -56,6 +42,13 @@ var barLength = (bar / (tempo / 60)) * 1000;
 
 // load all of the sounds and then when ready kick off the meow shoes setup and bindings
 var assets = new AbbeyLoad([voiceSet], function (buffers) {setupMeowShoes(buffers)});
+
+// this will push a short sound for each beat to the playback object to help the user time their foot taps
+function createMetronome() {
+  for (i = 0; i < bar; i++) {
+    playback.push({position: i, sensor: 'd'});
+  }
+}
 
 // play that sound! Make a new buffer each time -___-
 function playSound(buffer, time) {
@@ -81,8 +74,7 @@ function playVisual(image) {
         // remove so we don't be a dick with memory
         vish.remove();
       });
-
-}
+} // end playVisual
 
 function bindClicks() {
   // stop button
@@ -93,6 +85,7 @@ function bindClicks() {
 
   // let's go freestyle! This button is a toggle
   // TODO: make the button change state to show if freestyle is on or off
+  // also a giant "FREESTYLE!" text block appearing momentarily on the screen would be awesome
   $('#freeStyle').click(function() {
       if(!freestyle) {freestyle = true} else {freestyle = false};
   });
@@ -103,14 +96,33 @@ function bindClicks() {
     var newMode = e.target.id.substr(0, e.target.id.length - 4);
     currentVoice = newMode;
   });
-  
-};
+}; // end bindClicks
 
 // set up the shoezzz
 function setupMeowShoes(buffers) {
 
-  // whut even is in the buffer
-  console.log('buffs: ' + buffers.meow02);
+  // add metronome to bopper
+  createMetronome();
+
+  // set the tempo of bopper
+  bopper.setTempo(tempo);
+
+  bopper.on('data', function(schedule) {
+    // play the sound in sync with the 16 bar rhythm and tempo
+    playback.forEach(function(note){
+      if (note.position >= schedule.from && note.position < schedule.to){
+        // can i remove these two vars here? I think I can.
+        var delta = note.position - schedule.from,
+            time = schedule.time + delta;
+
+        // play the sound
+        playSound(buffers[note.sensor], 0);
+
+        // TODO: swap the file out for a currentVoice + note.sensor mapped filename - perhaps store in object similar to abbey load?
+        playVisual(note.sensor+'.png');
+      }
+    });
+  });
 
   // set up the socket connection
   socket = io.connect('http://localhost');
@@ -137,28 +149,9 @@ function setupMeowShoes(buffers) {
       }
     }
 
-  });
+  }); // end socket.on
 
-  // set the tempo of bopper
-  bopper.setTempo(tempo);
-
-  bopper.on('data', function(schedule) {
-    // play the sound in sync with the 16 bar rhythm and tempo
-    playback.forEach(function(note){
-      if (note.position >= schedule.from && note.position < schedule.to){
-        var delta = note.position - schedule.from,
-            time = schedule.time + delta;
-
-        // play the sound
-        playSound(buffers[note.sensor], 0);
-
-        // TODO: swap the file out for a currentVoice + note.sensor mapped filename - perhaps store in object similar to abbey load?
-        playVisual(note.sensor+'.png');
-      }
-    });
-  });
-
-  // read to kick this stuff off
+  // ready to kick this stuff off
   init();
 
 }; // end setupMeowShoes
