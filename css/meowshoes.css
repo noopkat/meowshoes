@@ -1,0 +1,11 @@
+#buttonpad {
+  position: absolute;
+  top:50px;
+  left: 50px;
+}
+
+.vish {
+  position:absolute;
+  width: 40px;
+  opacity: 0;
+}
