@@ -45,7 +45,8 @@ var freestyle    = false,
     browWidth    = $(window).width(),
     browHeight   = $(window).height(),
     source,
-    socket;
+    socket,
+    restartLoop;
 
 // we need to figure out when to restart the loop!
 // bpm / 60 = beats per second
@@ -115,7 +116,7 @@ function setupMeowShoes(buffers) {
   socket = io.connect('http://localhost');
 
   socket.on('sp', function (data) {
-    var sensorNum = parseInt(data, 10) || null,
+    var sensorNum = parseInt(data, 10),
         sound = currentVoice + sensorNum;
 
     // testing...
@@ -173,7 +174,7 @@ function init() {
   }, 500);
 
   // restart bopper based on total time of the playback
-  var restartLoop = setInterval(function(){
+  restartLoop = setInterval(function(){
     bopper.restart();
     console.log('restarting!', playback);
   }, barLength);
