@@ -1,23 +1,3 @@
-// I wouldn't mind moving the following objects to an assets.js file to manage instead
-// but create the visuals object first
-
-// set up the voices and sounds
-var voiceSet = {
-  'meow0' : '../sounds/meow01.mp3',
-  'meow1' : '../sounds/meow02.mp3',
-  'meow2' : '../sounds/meow03.mp3',
-  'meow3' : '../sounds/meow04.mp3',
-  'voice0': '../sounds/voice01.mp3',
-  'voice1': '../sounds/voice02.mp3',
-  'voice2': '../sounds/voice03.mp3',
-  'voice3': '../sounds/voice04.mp3',
-  'drum0' : '../sounds/drum01.mp3',
-  'drum1' : '../sounds/drum02.mp3',
-  'drum2' : '../sounds/drum03.mp3',
-  'drum3' : '../sounds/drum04.mp3',
-  'd'     : '../sounds/click.mp3'
-};
-
 // playback object, will contain all sequenced sounds
 var playback = []
 
@@ -61,7 +41,7 @@ function playSound(buffer, time) {
 // pretty pictures appearing in random places!
 function playVisual(image) {
   // create node string
-  var vish = $('<img class="vish" src="/imgs/'+image+'"/>');
+  var vish = $('<img class="vish" src="/imgs/' + image + '"/>');
   // add the image node in the body
   $('body').append(vish);
 
@@ -87,7 +67,7 @@ function bindClicks() {
   // TODO: make the button change state to show if freestyle is on or off
   // also a giant "FREESTYLE!" text block appearing momentarily on the screen would be awesome
   $('#freeStyle').click(function() {
-      if(!freestyle) {freestyle = true} else {freestyle = false};
+      freestyle ? false : true;
   });
 
   // change voices!!
@@ -110,16 +90,12 @@ function setupMeowShoes(buffers) {
   bopper.on('data', function(schedule) {
     // play the sound in sync with the 16 bar rhythm and tempo
     playback.forEach(function(note){
-      if (note.position >= schedule.from && note.position < schedule.to){
-        // can i remove these two vars here? I think I can.
-        var delta = note.position - schedule.from,
-            time = schedule.time + delta;
-
+      if (note.position >= schedule.from && note.position < schedule.to) {
         // play the sound
         playSound(buffers[note.sensor], 0);
 
-        // TODO: swap the file out for a currentVoice + note.sensor mapped filename - perhaps store in object similar to abbey load?
-        playVisual(note.sensor+'.png');
+        // play a visual
+        playVisual(visualSet[note.sensor]);
       }
     });
   });
@@ -138,6 +114,9 @@ function setupMeowShoes(buffers) {
     // make sure the data is in the format we expect, then play that sound immediately
     if (sensorNum >= 0 && sensorNum <= 3) {
       playSound(buffers[sound], 0);
+
+      // play a visual also
+      playVisual(visualSet[sound]);
 
       // if it's not freestyle queue the sound up
       if (!freestyle) {
@@ -160,15 +139,12 @@ function init() {
   // start bopper playing the loop
   setTimeout(function(){
     bopper.start();
-    console.log('bopperstart');
-
     bindClicks();
-
   }, 500);
 
   // restart bopper based on total time of the playback
   restartLoop = setInterval(function(){
     bopper.restart();
-    console.log('restarting!', playback);
+    //console.log('restarting!', playback);
   }, barLength);
 }
