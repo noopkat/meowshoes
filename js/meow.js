@@ -42,6 +42,8 @@ var freestyle    = false,
     tempo        = 120,
     context      = new webkitAudioContext(),
     bopper       = require('bopper')(context),
+    browWidth    = $(window).width(),
+    browHeight   = $(window).height(),
     source,
     socket;
 
@@ -64,20 +66,21 @@ function playSound(buffer, time) {
 
 // pretty pictures appearing in random places!
 function playVisual(image) {
+  // create node string
   var vish = $('<img class="vish" src="/imgs/'+image+'"/>');
-  // put it in the body and style
+  // add the image node in the body
   $('body').append(vish);
-  vish.css({
-          'top': Math.floor((Math.random()*800)+1)+'px', 
-          'left': Math.floor((Math.random()*1000)+1)+'px', 
-   });
 
-  vish.animate({'opacity':1}, 500);
-  vish.animate({'opacity':0}, 500, function() {
-    // remove so we don't be a dick with memory
-    vish.remove();
-  });
-  
+  // place it on the page at random, animate in and out
+  vish.css({
+            'top': Math.floor((Math.random() * browHeight) + 1 ) + 'px', 
+            'left': Math.floor((Math.random() * browWidth) + 1 ) + 'px' })
+      .animate({'opacity':1}, 500)
+      .animate({'opacity':0}, 500, function() {
+        // remove so we don't be a dick with memory
+        vish.remove();
+      });
+
 }
 
 function bindClicks() {
@@ -87,20 +90,16 @@ function bindClicks() {
       clearInterval(restartLoop);
   });
 
-  // let's go freestyle!
+  // let's go freestyle! This button is a toggle
+  // TODO: make the button change state to show if freestyle is on or off
   $('#freeStyle').click(function() {
-      if(!freestyle) {
-        freestyle = true;
-      } else {
-        freestyle = false;
-      }
-      console.log('freestyle: ' + freestyle);
+      if(!freestyle) {freestyle = true} else {freestyle = false};
   });
 
   // change voices!!
   $('.changeMode').click(function(e) {
-    var newMode = e.target.id.substr(0, e.target.id.length-4);
-    console.log('newMode'+newMode);
+    // should I change this to current target?
+    var newMode = e.target.id.substr(0, e.target.id.length - 4);
     currentVoice = newMode;
   });
   
