@@ -1,24 +1,23 @@
-=========
 meowshoes
 =========
 
-musical shoes project.
+Musical shoes project, created at the Vegas Hack Fashion Tech Hackathon
 
-libs, runtimes and api's used: 
+Stuff I used, written by talented people:
+-----------------------------------------
++ Web Audio API (Chrome)
++ Abbey Load helper
++ Node JS
 
-
-web audio api (Chrome)
-abbey load helper
-nodejs
-
-** node modules:
-bopper
-browserify
-socketio
-serialport
+Node nodules used:
+------------------
++ Bopper
++ Browserify
++ Socketio
++ Serialport
 
 Thank you, all of the authors of the above libs/modules are way better programmers than me.
 
 TODO:
-=======
-reorganise code and objects
+------
+1.  reorganise code and objects
