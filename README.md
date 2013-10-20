@@ -19,8 +19,8 @@ Thank you, all of the authors of the above libs/modules are way better programme
 
 ### TODO:
 1.  ~~reorganise code and objects~~
-2.  implement Audia for the sound playing, but keep abbey load's sound object format for dynamic loading
-3.  ~~establish that the latest refactor actually works~~
+2.  ~~establish that the latest refactor actually works~~
+3.  convert wires to low energy bluetooth solution
 4.  make some pretty ui that isn't so bootstrappy
 5.  allow more granular config, such as loading voice collections and some ui options
 6.  recording - if you like a loop, keep it!
