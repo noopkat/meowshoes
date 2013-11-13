@@ -17,16 +17,17 @@ var voiceSet = {
 
 // set up the visuals
 var visualSet = {
-  'meow0' : 'meow01.png',
-  'meow1' : 'meow02.png',
-  'meow2' : 'meow03.png',
-  'meow3' : 'meow04.png',
-  'voice0': 'voice01.png',
-  'voice1': 'voice02.png',
-  'voice2': 'voice03.png',
-  'voice3': 'voice04.png',
-  'drum0' : 'drum01.png',
-  'drum1' : 'drum02.png',
-  'drum2' : 'drum03.png',
-  'drum3' : 'drum04.png'
+  'meow0' : 'meow0.png',
+  'meow1' : 'meow1.png',
+  'meow2' : 'meow2.png',
+  'meow3' : 'meow3.png',
+  'voice0': 'voice0.png',
+  'voice1': 'voice1.png',
+  'voice2': 'voice2.png',
+  'voice3': 'voice3.png',
+  'drum0' : 'drum1.png',
+  'drum1' : 'drum2.png',
+  'drum2' : 'drum3.png',
+  'drum3' : 'drum4.png',
+  'd'     : 'd.png'
 };
