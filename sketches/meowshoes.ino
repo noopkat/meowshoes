@@ -4,41 +4,57 @@
   MEOW
  
  */
- 
-bool leftStand = true;
-bool rightStand = true;
 
-int pendingTapLeft = -1;
-int pendingTapRight = -1;
-int tapTimeoutLeftToe = 0;
-int tapTimeoutRightToe = 0;
-int tapTimeoutLeftHeel = 0;
-int tapTimeoutRightHeel = 0;
-
-int leftToeVal = 0;
-int leftHeelVal = 0;
-int rightToeVal = 0;
-int rightHeelVal = 0;
-
-// These constants won't change.  They're used to give names
-// to the pins used:
-const int leftToePin = 0;
-const int leftHeelPin = 1;  
-const int rightToePin = 2;  
-const int rightHeelPin = 3;  
-const int tapTimeoutThresh = 30;
 
 void setup() {
+  
+  // flag for user standing
+  bool leftStand  = true;
+  bool rightStand = true;
+
+  // a foot tap is pending but not confirmed
+  int pendingTapLeft  = -1;
+  int pendingTapRight = -1;
+
+  // setting up whether a pending foot tap times out or not
+  int tapTimeoutLeftToe   = 0;
+  int tapTimeoutRightToe  = 0;
+  int tapTimeoutLeftHeel  = 0;
+  int tapTimeoutRightHeel = 0;
+
+  // these will store the analog values received from the pressure sensors
+  int leftToeVal   = 0;
+  int leftHeelVal  = 0;
+  int rightToeVal  = 0;
+  int rightHeelVal = 0;
+
+  // constants defining the ardiuno analog pins used
+  const int leftToePin   = 0;
+  const int leftHeelPin  = 1;  
+  const int rightToePin  = 2;  
+  const int rightHeelPin = 3;  
+
+  // how long the threshold is for a tap to timeout and not be confirmed
+  // this number is the milliseconds divisible by 10 as we delay for 10ms between each read later
+  const int tapTimeoutThresh = 30;
+  
   // initialize serial communications at 9600 bps:
   Serial.begin(9600); 
 }
 
 void loop() {
-     
+  
+  monitorFeet();
+  
+}
+
+// this is the guts of it, the filter of the analog data into actual foot taps to be sent over serial
+void monitorFeet() {
+  
     // read *all* of the pins!
-    leftToeVal = analogRead(leftToePin);
-    leftHeelVal = analogRead(leftHeelPin);
-    rightToeVal = analogRead(rightToePin);
+    leftToeVal   = analogRead(leftToePin);
+    leftHeelVal  = analogRead(leftHeelPin);
+    rightToeVal  = analogRead(rightToePin);
     rightHeelVal = analogRead(rightHeelPin);
     
     // if tap is already pending, and the tap lasted for at least 300 milliseconds
@@ -75,25 +91,30 @@ void loop() {
     
     // if left toe is pressed, set pending tap and increment time tapped for
     // make sure to check that heel is not also down, otherwise the user is standing/pausing
-    if (isPressed(leftToeVal) == true && isPressed(leftHeelVal) == false) {
+    if (isPressed(leftToeVal) && !isPressed(leftHeelVal)) {
         pendingTapLeft = leftToePin;
         tapTimeoutLeftToe++;
       
-     } else if (isPressed(leftHeelVal) == true && isPressed(leftToeVal) == false) {
+    // if left heel is pressed, set pending tap and increment time tapped for
+    // make sure to check that toe is not also down, otherwise the user is standing/pausing
+     } else if (isPressed(leftHeelVal) && !isPressed(leftToeVal)) {
         pendingTapLeft = leftHeelPin;
         tapTimeoutLeftHeel++;
       
-     } else if (isPressed(rightHeelVal) == true && isPressed(rightToeVal) == false) {
+    // if right heel is pressed, set pending tap and increment time tapped for
+    // make sure to check that toe is not also down, otherwise the user is standing/pausing
+     } else if (isPressed(rightHeelVal) && !isPressed(rightToeVal)) {
         pendingTapRight = rightHeelPin;
         tapTimeoutRightHeel++;
-      
-     } else if (isPressed(rightToeVal) == true && isPressed(rightHeelVal) == false) {
+    
+    // if right toe is pressed, set pending tap and increment time tapped for
+    // make sure to check that heel is not also down, otherwise the user is standing/pausing
+     } else if (isPressed(rightToeVal) && !isPressed(rightHeelVal)) {
         pendingTapRight = rightToePin;
         tapTimeoutRightToe++;
      
-     
      } else {
-      // their toe came back up
+      // their foot came back up 
        pendingTapLeft = -1;
        tapTimeoutLeftToe = 0; 
        delay(10);
@@ -102,20 +123,25 @@ void loop() {
   // wait 10 milliseconds before the next loop
   // for the analog-to-digital converter to settle
   // after the last reading:
-  delay(10);                     
+  delay(10);
 }
 
-// checks the sensor value
+// checks the sensor value to see if it's at a value suggesting pressure on it
 bool isPressed(int val) {
-      if (val < 30) {
-        return true;
-      } else {
-        return false;
-      }
+      
+  // this 30 val below will need to change when you solder the pins properly :P
+  // it'll most likely be like 995 or something similar
+  // that number is calibrated to my weight, tap strength and particular sensors
+  if (val < 30) 
+    return true else return false;
+
 }
 
 // prints the pin number to serial for javascript to pick up and use to play and sequence sounds
 void sendTap(int pinNo) {
+    // print the pin number to serial, node can recognise it and go from there
      Serial.println(pinNo);
+     
+     // not sure why this delay is in here, I think it was a desparate hackathon move
      delay(10);
 }
