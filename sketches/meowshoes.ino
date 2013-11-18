@@ -57,6 +57,34 @@ void monitorFeet() {
     rightToeVal  = analogRead(rightToePin);
     rightHeelVal = analogRead(rightHeelPin);
     
+    /* 
+     * maybe I can make each foot an object and just check the left & right foot on loop 
+     * like one function to check each foot to see what's being pressed and whether to send a tap
+     * this is probably going to have to write to a custom low energy bluetooth service hmm
+     * maybe for example:
+     * 
+     * {
+     *   'pins'  :  [0,1],
+     *   'parts' :  ['toe', 'heel']
+     * } 
+     * 
+     * this should then be all that's required:
+     * Foot leftFoot  = new Foot([0,1]); 
+     * Foot rightFoot = new Foot([2,3]);
+     * 
+     * uint leftTap  = leftFoot.checkTap();
+     * uint rightTap = rightFoot.checkTap();
+     * 
+     * if (leftTap > -1)
+     *   sendTap(leftTap);
+     * 
+     * if (rightTap > -1)
+     *   sendTap(rightTap);
+     * 
+     * this might just work ya know
+     * 
+     */
+    
     // if tap is already pending, and the tap lasted for at least 300 milliseconds
     if ((pendingTapLeft != -1) && (tapTimeoutLeftToe >= tapTimeoutThresh)) {
       // send tap
