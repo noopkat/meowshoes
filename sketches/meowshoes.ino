@@ -82,6 +82,11 @@ void monitorFeet() {
      *   sendTap(rightTap);
      * 
      * this might just work ya know
+     * wait wait, this is gonna be split up by feet anyway, one sketch per foot. 
+     * do I need to send a different pin no per sensor, or just 0 & 1 and then
+     * filter by which serial channel node is receiving values from?
+     * this is something I should really think about
+     * of course making this sketch be simple to add multiple new feet all the time is still useful
      * 
      */
     
