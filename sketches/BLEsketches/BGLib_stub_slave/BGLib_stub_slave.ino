@@ -151,6 +151,7 @@ void loop() {
             digitalWrite(LED_PIN, slice < 100 || (slice > 200 && slice < 300));
         } else {
             digitalWrite(LED_PIN, slice < 100 || (slice > 200 && slice < 300) || (slice > 400 && slice < 500));
+            // `` perhaps put the filtered data function call here?
         }
     }
 }
@@ -388,5 +389,6 @@ void my_ble_evt_attributes_value(const struct ble_msg_attributes_value_evt_t *ms
         digitalWrite(8, msg -> value.data[0] & 0x01);
         digitalWrite(9, msg -> value.data[0] & 0x02);
         digitalWrite(10, msg -> value.data[0] & 0x04);
+        // `` maybe put filtering function for shoes in here?
     }
 }
