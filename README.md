@@ -22,14 +22,8 @@ Thank you, all of the authors of the above libs/modules are way better programme
 ### TODO:
 1.  ~~reorganise code and objects~~
 2.  ~~establish that the latest refactor actually works~~
-3.  convert wires to low energy bluetooth solution
+3.  convert to johnny-five enabled
 4.  make some pretty ui that isn't so bootstrappy
 5.  allow more granular config, such as loading voice collections and some ui options
 6.  recording - if you like a loop, keep it!
 7.  learn how to use the darn shoes and make actual music ^__^
-
-### RESOURCES
-+ [Bluetooth Low Energy core spec](https://www.bluetooth.org/en-us/specification/adopted-specifications)
-+ [iOS Guide to custom BLE services](https://developer.apple.com/library/ios/documentation/NetworkingInternetWeb/Conceptual/CoreBluetooth_concepts/PerformingCommonPeripheralRoleTasks/PerformingCommonPeripheralRoleTasks.html)
-+ [Reading services](http://joost.damad.be/2013/08/experiments-with-bluetooth-low-energy.html)
-+ [Red Bear BLE controller sketch for read/write](https://github.com/RedBearLab/BLEShield/blob/master/Arduino/libraries/RBL_BLEShield/examples/SimpleControls/SimpleControls.ino)
