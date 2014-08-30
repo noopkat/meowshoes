@@ -26,4 +26,9 @@ Thank you, all of the authors of the above libs/modules are way better programme
 4.  make some pretty ui that isn't so bootstrappy
 5.  allow more granular config, such as loading voice collections and some ui options
 6.  recording - if you like a loop, keep it!
-7.  learn how to use the darn shoes and make actual music ^__^
+7.  sew a good housing for the sensors
+8.  3D print arduino housing
+9.  implement curly microphone cord to link shoes
+10. create better way to secure arduino to body
+11. solder sensors to a breakout shield
+12. Write tutorial/blog post
