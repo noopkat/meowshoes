@@ -3,14 +3,8 @@
   "description": "musical shoes",
   "author": "Suz Hinton <susan@owlposse.com>",
   "dependencies": {
-    "bopper": ">= 0.1.1",
-    "browserify": ">= 0.1.0",
-    "express": ">= 3.4.0",
-    "hapi": "^7.0.0",
     "johnny-five": "~0.8.8",
-    "serialport": ">= 1.2.2",
-    "socket.io": ">= 0.9.16",
-    "temporal": "^0.3.8"
+    "socket.io": "^1.1.0"
   },
   "engines": {
     "node": ">= 0.10.0"
