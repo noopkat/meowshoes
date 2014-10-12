@@ -7,18 +7,25 @@ var freestyle    = false,
     bar          = 16,
     tempo        = 120,
     context      = new webkitAudioContext(),
-    bopper       = require('bopper')(context),
+    // bopper       = require('bopper')(context),
+    temporal     = require('temporal'),
     browWidth    = $(window).width(),
     browHeight   = $(window).height(),
     source,
     socket,
     restartLoop;
 
+// to work out millisecond loop delay for tempo which is bpm:
+var beat = 60 / tempo * 1000;
+var curBeat = 0;
+
 // we need to figure out when to restart the loop!
 // bpm / 60 = beats per second
 // amount of beats / beats per second = duration of loop in seconds
 // duration of loop * 1000 = duration in milliseconds
-var barLength = (bar / (tempo / 60)) * 1000;
+
+// don't need this anymore
+//var barLength = (bar / (tempo / 60)) * 1000;
 
 // load all of the sounds and then when ready kick off the meow shoes setup and bindings
 var assets = new AbbeyLoad([voiceSet], function (buffers) {setupMeowShoes(buffers)});
@@ -26,11 +33,12 @@ var assets = new AbbeyLoad([voiceSet], function (buffers) {setupMeowShoes(buffer
 // this will push a short sound for each beat to the playback object to help the user time their foot taps
 function createMetronome() {
   for (i = 0; i < bar; i++) {
+    // fix this to match new voice structure
     playback.push({position: i, sensor: 'd'});
   }
 }
 
-// play that sound! Make a new buffer each time -___-
+// play that sound! 
 function playSound(buffer, time) {
   source = context.createBufferSource();
   source.buffer = buffer;
@@ -41,26 +49,30 @@ function playSound(buffer, time) {
 // pretty pictures appearing in random places!
 function playVisual(image) {
   // create node string
-  var vish = $('<img class="vish" src="/imgs/' + image + '"/>');
+  var picture = $('<img class="vish" src="/imgs/' + image + '"/>');
   // add the image node in the body
-  $('body').append(vish);
+  $('body').append(picture);
 
   // place it on the page at random, animate in and out
-  vish.css({
+  picture.css({
             'top': Math.floor((Math.random() * browHeight) + 1 ) + 'px', 
-            'left': Math.floor((Math.random() * browWidth) + 1 ) + 'px' })
+            'left': Math.floor((Math.random() * browWidth) + 1 ) + 'px' 
+      })
       .animate({'opacity':1}, 500)
       .animate({'opacity':0}, 500, function() {
-        // remove so we don't be a dick with memory
-        vish.remove();
+        picture.remove();
       });
 } // end playVisual
 
 function bindClicks() {
   // stop button
   $('#stopMusic').click(function() {
-      bopper.stop();
-      clearInterval(restartLoop);
+      // old way
+      //bopper.stop();
+      // temporal way
+      sequencer.stop();
+      // old way
+      //clearInterval(restartLoop);
   });
 
   // let's go freestyle! This button is a toggle
@@ -85,34 +97,57 @@ function setupMeowShoes(buffers) {
   createMetronome();
 
   // set the tempo of bopper
-  bopper.setTempo(tempo);
+  //bopper.setTempo(tempo);
 
-  bopper.on('data', function(schedule) {
-    // play the sound in sync with the 16 bar rhythm and tempo
+  // replace this here with temporal which brings dev back to using johnny-five/rwaldron related things for consistency in book
+  // bopper.on('data', function(schedule) {
+  //   // play the sound in sync with the 16 bar rhythm and tempo
+  //   playback.forEach(function(note){
+  //     if (note.position >= schedule.from && note.position < schedule.to) {
+  //       // play the sound
+  //       playSound(buffers[note.sensor], 0);
+
+  //       // play a visual
+  //       playVisual(visualSet[note.sensor]);
+  //     }
+  //   });
+  // });
+
+  // example of temporal
+  // Loop every n milliseconds, executing a task each time
+  var sequencer = temporal.loop(beat, function() {
+    console.log('beat!');
+
     playback.forEach(function(note){
-      if (note.position >= schedule.from && note.position < schedule.to) {
+
+      if (note.position === curBeat) {
         // play the sound
         playSound(buffers[note.sensor], 0);
-
         // play a visual
         playVisual(visualSet[note.sensor]);
       }
+
     });
+
+    // reset beat back to 0
+    curBeat = (curBeat === bar - 1) ? 0 : += 1;
+
   });
 
   // set up the socket connection
   socket = io.connect('http://localhost');
 
-  socket.on('sp', function (data) {
-    var sensorNum = parseInt(data, 10),
-        sound = currentVoice + sensorNum;
+  socket.on('tap', function (data) {
+    // sensorNum is no longer an accurately descriptive variable name
+    var sensorNum = data,
+        sound = currentVoice + '_' + sensorNum;
 
     // testing...
-    console.log(sound);
-    console.log(data);
+    // console.log(sound);
+    // console.log(data);
 
     // make sure the data is in the format we expect, then play that sound immediately
-    if (sensorNum >= 0 && sensorNum <= 3) {
+    //if (sensorNum >= 0 && sensorNum <= 3) {
       playSound(buffers[sound], 0);
 
       // play a visual also
@@ -121,12 +156,16 @@ function setupMeowShoes(buffers) {
       // if it's not freestyle queue the sound up
       if (!freestyle) {
         // find the closest beat that the user tapped at
-        curPos = Math.floor(bopper.getCurrentPosition());
+        // commented this out because of temporal
+        //curPos = Math.floor(bopper.getCurrentPosition());
 
         // push the note to the queue 
-        playback.push({'position': curPos, 'sensor': sound})
+        //playback.push({'position': curPos, 'sensor': sound});
+
+        // push the note to the queue, the temporal way
+        playback.push({'position': curBeat, 'sensor': sound})
       }
-    }
+   // }
 
   }); // end socket.on
 
@@ -138,13 +177,14 @@ function setupMeowShoes(buffers) {
 function init() {
   // start bopper playing the loop
   setTimeout(function(){
-    bopper.start();
+    //do not start bopper anymore
+    //bopper.start();
     bindClicks();
   }, 500);
 
   // restart bopper based on total time of the playback
-  restartLoop = setInterval(function(){
-    bopper.restart();
-    //console.log('restarting!', playback);
-  }, barLength);
+  // restartLoop = setInterval(function(){
+  //   bopper.restart();
+  //   //console.log('restarting!', playback);
+  // }, barLength);
 }
