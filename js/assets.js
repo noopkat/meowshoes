@@ -12,7 +12,7 @@ var voiceSet = {
   'drum_leftheel'  : '../sounds/drum02.mp3',
   'drum_righttoe'  : '../sounds/drum03.mp3',
   'drum_rightheel' : '../sounds/drum04.mp3',
-  'd'              : '../sounds/click.mp3'
+  'm'              : '../sounds/click.mp3'
 };
 
 // set up the visuals
@@ -29,5 +29,5 @@ var visualSet = {
   'drum_leftheel'  : 'drum2.png',
   'drum_righttoe'  : 'drum3.png',
   'drum_rightheel' : 'drum4.png',
-  'd'              : 'd.png'
+  'm'              : 'd.png'
 };

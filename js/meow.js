@@ -4,30 +4,30 @@ var playback = [];
 // set up the defaults
 var freestyle    = false,
     currentVoice = 'meow',
-    bar          = 16,
-    tempo        = 120,
     context      = new webkitAudioContext(),
     browWidth    = $(window).width(),
     browHeight   = $(window).height(),
     source,
     sequencer;
 
-// to work out our interval millisecond loop delay for tempo which is bpm:
-var beat = 60 / tempo * 1000;
-var curBeat = 0;
+var bar = 16,                 // 16 beats in the bar
+    tempo = 120,              // bpm
+    beat = 60 / tempo * 1000, // beat duration
+    curBeat = 0;
 
 // load all of the sounds and then when ready kick off the meow shoes setup and bindings
-var assets = new AbbeyLoad([voiceSet], function (buffers) {setupMeowShoes(buffers)});
+var assets = new AbbeyLoad([voiceSet], function (buffers) {
+  setupMeowShoes(buffers)
+});
 
 // this will push a short sound for each beat to the playback object to help the user time their foot taps
 function createMetronome() {
   for (i = 0; i < bar; i++) {
-    // fix this to match new voice structure
-    playback.push({position: i, sensor: 'd'});
+    playback.push({position: i, sensor: 'm'});
   }
 }
 
-// play that sound! 
+// play that sound
 function playSound(buffer, time) {
   source = context.createBufferSource();
   source.buffer = buffer;
@@ -35,7 +35,7 @@ function playSound(buffer, time) {
   source.start(time);
 }
 
-// pretty pictures appearing in random places!
+// pretty pictures appearing in random places
 function playVisual(image) {
   // create node string
   var picture = $('<img class="vish" src="/imgs/' + image + '"/>');
@@ -51,33 +51,37 @@ function playVisual(image) {
       .animate({'opacity':0}, 500, function() {
         picture.remove();
       });
-} // end playVisual
+}
 
 function bindClicks() {
   // stop button
-  $('#stopMusic').click(function() {
+  $('#stopMusic').click(function(e) {
+      e.preventDefault();
       clearInterval(sequencer);
   });
 
   // let's go freestyle! This button is a toggle
-  $('#freeStyle').click(function() {
+  $('#freeStyle').click(function(e) {
+      e.preventDefault();
       freestyle ? false : true;
   });
 
-  // change voices!!
+  // change voices
   $('.changeMode').click(function(e) {
+    e.preventDefault();
     // should I change this to current target?
     var newMode = e.target.id.substr(0, e.target.id.length - 4);
     currentVoice = newMode;
   });
 };
 
-// set up the shoezzz
+// set up the shoes
 function setupMeowShoes(buffers) {
 
   // add metronome to bopper
   createMetronome();
   // Loop every n milliseconds, executing a task each time
+  // the most primitive form of a loop sequencer as a simple example
   sequencer = setInterval(function() {
 
     playback.forEach(function(note){
@@ -109,8 +113,8 @@ function setupMeowShoes(buffers) {
     console.log(sound);
     console.log(data);
 
+    // play matching sound immediately to confirm to user
     playSound(buffers[sound], 0);
-
     // play a visual also
     playVisual(visualSet[sound]);
 
