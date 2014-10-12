@@ -12,23 +12,20 @@ Demo video from the hackathon is [here](http://www.youtube.com/watch?v=1g3M6PILq
 + Node.js - [link](http://nodejs.org "Node JS website")
 
 #### Node nodules used:
-+ Bopper - [link](https://npmjs.org/package/bopper)
-+ Browserify - [link](https://npmjs.org/package/browserify)
 + Socket.io - [link](https://npmjs.org/package/socket.io)
-+ Serialport - [link](https://npmjs.org/package/serialport)
++ Johnny-Five - [link](https://npmjs.org/package/johnny-five)
 
 Thank you, all of the authors of the above libs/modules are way better programmers than me.
 
 ### TODO:
 1.  ~~reorganise code and objects~~
 2.  ~~establish that the latest refactor actually works~~
-3.  convert to johnny-five enabled
+3.  ~~convert to johnny-five enabled~~
 4.  make some pretty ui that isn't so bootstrappy
 5.  allow more granular config, such as loading voice collections and some ui options
 6.  recording - if you like a loop, keep it!
-7.  sew a good housing for the sensors
-8.  3D print arduino housing
-9.  implement curly microphone cord to link shoes
-10. create better way to secure arduino to body
-11. solder sensors to a breakout shield
-12. Write tutorial/blog post
+7.  ~~3D print arduino housing~~
+8.  ~~implement curly microphone cord to link shoes~~
+9. ~~create better way to secure arduino to body~~
+10. solder sensors to a breakout shield
+11. Write tutorial/blog post
