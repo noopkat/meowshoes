@@ -29,6 +29,8 @@ var io = require('socket.io')(app);
 app.listen(3000);
 
 var tapTimeoutThresh = 30;
+var pressureThresh = 800;
+
 var shoes = {
       left: {
         toe: { val: 0, timeout: 0 },
@@ -64,22 +66,22 @@ board.on('ready', function() {
   });
 
   rightToe.on('data', function() {
-    //console.log(this.value);
+    console.log(this.value);
     shoes.right.toe.val = this.value;
   });
 
   rightHeel.on('data', function() {
-    //console.log(this.value);
+    console.log(this.value);
     shoes.right.heel.val = this.value;
   });
 
   leftToe.on('data', function() {
-    //console.log(this.value);
+    console.log(this.value);
     shoes.left.toe.val = this.value;
   });
 
   leftHeel.on('data', function() {
-   // console.log(this.value);
+   console.log(this.value);
     shoes.left.heel.val = this.value;
   });
 
@@ -125,7 +127,7 @@ board.on('ready', function() {
 }); //end board
 
 function isPressed(val) {
-  if (val < 30) {
+  if (val > pressureThresh) {
     return true;
   } else {
     return false;
