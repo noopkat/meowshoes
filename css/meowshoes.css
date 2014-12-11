@@ -1,8 +1,18 @@
+body {
+  padding: 50px;
+}
+
+h1 {
+  font-family: 'Patrick Hand', cursive;
+  font-size: 72px;
+}
+
 #buttonpad {
-  position: absolute;
-  top:50px;
-  left: 50px;
-  z-index: 9999;
+  margin-top: 50px;
+}
+
+#secondSet {
+  margin-top: 20px;
 }
 
 .vish {
