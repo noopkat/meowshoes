@@ -8,6 +8,10 @@ Demo video from the hackathon is [here](http://www.youtube.com/watch?v=1g3M6PILq
 
 ![meow shoes](http://f.cl.ly/items/0l2Z2U3t023F1T2J1D21/twinset.jpg "Meow Shoes")
 
+You can now make your own Meow Shoes! Tutorial featured in [Make: JavaScript Robotics](http://shop.oreilly.com/product/0636920031390.do#) by O'Reilly Media.
+
+[![javascript robotics book cover](book.jpg)](http://shop.oreilly.com/product/0636920031390.do#)
+
 
 ### Other potential uses
 
