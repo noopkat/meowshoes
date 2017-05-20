@@ -4,7 +4,7 @@ var playback = [];
 // set up the defaults
 var freestyle    = false,
     currentVoice = 'meow',
-    context      = new webkitAudioContext(),
+    context      = new AudioContext(),
     browWidth    = $(window).width(),
     browHeight   = $(window).height(),
     source,
@@ -102,7 +102,7 @@ function setupMeowShoes(buffers) {
   }, beat);
 
   // set up the socket connection
-  socket = io('http://localhost');
+  socket = io('http://localhost:3000');
 
   socket.on('tap', function (data) {
     // sensorNum is no longer an accurately descriptive variable name

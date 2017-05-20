@@ -1,7 +1,8 @@
 var http = require('http'),
     five = require('johnny-five'),
     board = new five.Board(),
-    fs = require('fs');
+    fs = require('fs'),
+    port = 3000;
 
 function handler(req, res) {
   var path = __dirname;
@@ -26,7 +27,7 @@ function handler(req, res) {
 var app = http.createServer(handler);
 var io = require('socket.io')(app);
 
-app.listen(3000);
+app.listen(port);
 
 var tapTimeoutThresh = 30;
 var pressureThresh = 800;

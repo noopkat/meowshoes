@@ -26,8 +26,8 @@ var visualSet = {
   'voice_righttoe' : 'voice2.png',
   'voice_rightheel': 'voice3.png',
   'drum_lefttoe'   : 'drum1.png',
-  'drum_leftheel'  : 'drum2.png',
-  'drum_righttoe'  : 'drum3.png',
-  'drum_rightheel' : 'drum4.png',
+  'drum_leftheel'  : 'drum1.png',
+  'drum_righttoe'  : 'drum1.png',
+  'drum_rightheel' : 'drum1.png',
   'm'              : 'd.png'
 };
